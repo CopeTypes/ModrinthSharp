@@ -66,13 +66,16 @@
     <ItemGroup>
         <Compile Include="API.cs" />
         <Compile Include="APIClient.cs" />
+        <Compile Include="APIException.cs" />
         <Compile Include="models\Dependency.cs" />
+        <Compile Include="models\DependencySearch.cs" />
         <Compile Include="models\DonationUrl.cs" />
         <Compile Include="models\File.cs" />
         <Compile Include="models\GalleryItem.cs" />
         <Compile Include="models\Hashes.cs" />
         <Compile Include="models\License.cs" />
         <Compile Include="models\Project.cs" />
+        <Compile Include="models\ProjectCheck.cs" />
         <Compile Include="models\SearchResult.cs" />
         <Compile Include="models\SearchResults.cs" />
         <Compile Include="models\Version.cs" />
