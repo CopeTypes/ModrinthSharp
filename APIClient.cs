@@ -14,14 +14,16 @@ namespace ModrinthSharp
 
         public APIClient()
         {
-            _client = new HttpClient { BaseAddress = new Uri(BaseUrl) };
+            _client = new HttpClient();
+            _client.DefaultRequestHeaders.UserAgent.ParseAdd("ModrinthSharp");
         }
         
         
         public async Task<T> GetAsync<T>(string endpoint)
         {
-            var response = await _client.GetAsync($"/{endpoint}");
-            if (!response.IsSuccessStatusCode) throw new WebException(); // todo better error handling
+            
+            var response = await _client.GetAsync(BaseUrl + endpoint);
+            if (!response.IsSuccessStatusCode) throw new APIException($"Request to {endpoint} failed with status code {response.StatusCode}: {response.ReasonPhrase}");
             var data = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<T>(data);
         }
