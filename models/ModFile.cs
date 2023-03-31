@@ -2,7 +2,7 @@
 
 namespace ModrinthSharp
 {
-    public class File
+    public class ModFile
     {
         [JsonProperty("hashes")] public Hashes Hashes { get; set; }
         [JsonProperty("url")] public string Url { get; set; }

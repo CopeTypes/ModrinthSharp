@@ -7,21 +7,21 @@ using ModrinthSharp.util;
 
 namespace ModrinthSharp
 {
-    public class API
+    public class ModrinthApi
     {
 
-        private APIClient _apiClient;
+        private ModrinthClient _modrinthClient;
 
-        public API()
+        public ModrinthApi()
         {
-            _apiClient = new APIClient();
+            _modrinthClient = new ModrinthClient();
         }
 
         private async Task<bool> CheckProject(string id)
         {
             try
             {
-                var check = await _apiClient.GetAsync<ProjectCheck>($@"/project/{id}/check");
+                var check = await _modrinthClient.GetAsync<ProjectCheck>($@"/project/{id}/check");
                 return !string.IsNullOrEmpty(check.Id);
             }
             catch (WebException)
@@ -33,8 +33,8 @@ namespace ModrinthSharp
         
         public async Task<Project> GetProjectById(string id)
         {
-            if (!await CheckProject(id)) throw new APIException("Project not found.");
-            return await _apiClient.GetAsync<Project>($@"/project/{id}");
+            if (!await CheckProject(id)) throw new ModrinthApiException("Project not found.");
+            return await _modrinthClient.GetAsync<Project>($@"/project/{id}");
         }
         
         public async Task<Project> GetProjectBySlug(string slug)
@@ -47,23 +47,23 @@ namespace ModrinthSharp
         public async Task<SearchResults> Search(string query, IndexType indexType, int limit = 10, int offset = 0,
             List<Facet> facets = null)
         {
-            if (string.IsNullOrEmpty(query)) throw new APIException("Invalid query");
+            if (string.IsNullOrEmpty(query)) throw new ModrinthApiException("Invalid query");
             var endpoint = $"/search?query={Uri.UnescapeDataString(query)}&index={indexType.ToString().ToLower()}&limit={limit}&offset={offset}";
             if (facets != null) endpoint += $"&facets={Facet.ToJsArray(facets)}";
 
-            return await _apiClient.GetAsync<SearchResults>(endpoint);
+            return await _modrinthClient.GetAsync<SearchResults>(endpoint);
         }
         
         public async Task<Version> GetVersionFromHash(string hash)
         {
-            return await _apiClient.GetAsync<Version>($@"/version_file/{hash}");
+            return await _modrinthClient.GetAsync<Version>($@"/version_file/{hash}");
         }
 
 
         private async Task<DependencySearch> GetDependencies(string id)
         {
-            if (!await CheckProject(id)) throw new APIException("Project not found.");
-            return await _apiClient.GetAsync<DependencySearch>($@"/project/{id}/dependencies");
+            if (!await CheckProject(id)) throw new ModrinthApiException("Project not found.");
+            return await _modrinthClient.GetAsync<DependencySearch>($@"/project/{id}/dependencies");
         }
 
         public async Task<DependencySearch> GetDependencies(Project project)

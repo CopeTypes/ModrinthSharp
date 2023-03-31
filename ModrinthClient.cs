@@ -7,12 +7,12 @@ using Newtonsoft.Json;
 
 namespace ModrinthSharp
 {
-    public class APIClient
+    public class ModrinthClient
     {
         private const string BaseUrl = "https://api.modrinth.com/v2";
         private readonly HttpClient _client;
 
-        public APIClient()
+        public ModrinthClient()
         {
             _client = new HttpClient();
             _client.DefaultRequestHeaders.UserAgent.ParseAdd("ModrinthSharp");
@@ -23,7 +23,7 @@ namespace ModrinthSharp
         {
             
             var response = await _client.GetAsync(BaseUrl + endpoint);
-            if (!response.IsSuccessStatusCode) throw new APIException($"Request to {endpoint} failed with status code {response.StatusCode}: {response.ReasonPhrase}");
+            if (!response.IsSuccessStatusCode) throw new ModrinthApiException($"Request to {endpoint} failed with status code {response.StatusCode}: {response.ReasonPhrase}");
             var data = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<T>(data);
         }

@@ -21,6 +21,6 @@ namespace ModrinthSharp
         [JsonProperty("date_published")] public string DatePublished { get; set; }
         [JsonProperty("downloads")] public int Downloads { get; set; }
         [JsonProperty("changelog_url")] public object ChangelogUrl { get; set; }
-        [JsonProperty("files")] public List<File> Files { get; set; }
+        [JsonProperty("files")] public List<ModFile> Files { get; set; }
     }
 }
