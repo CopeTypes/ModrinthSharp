@@ -125,6 +125,7 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="models\VersionSearch.cs" />
         <Compile Include="ModrinthApi.cs" />
         <Compile Include="ModrinthClient.cs" />
         <Compile Include="ModrinthApiException.cs" />
