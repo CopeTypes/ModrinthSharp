@@ -3,8 +3,8 @@ using Newtonsoft.Json;
 
 namespace ModrinthSharp
 {
-    public class VersionSearch
+    public class VersionSearch : List<Version>
     {
-        [JsonProperty("")] public List<Version> Versions { get; set; }
+        
     }
 }

@@ -84,7 +84,7 @@ namespace ModrinthSharp
             if (!await CheckProject(id)) throw new ModrinthApiException("Project not found.");
             VersionSearch vs = await _modrinthClient.GetAsync<VersionSearch>($@"/project/{id}/version");
             if (vs == null) throw new ModrinthApiException("Error parsing version information.");
-            return vs.Versions;
+            return vs.ToList();
         }
 
         public async Task<Version> GetLatestVersion(string id)
