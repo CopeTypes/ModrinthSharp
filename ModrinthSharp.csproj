@@ -145,6 +145,7 @@
         <Compile Include="util\Facet.cs" />
         <Compile Include="util\FacetType.cs" />
         <Compile Include="util\IndexType.cs" />
+        <Compile Include="util\Utils.cs" />
     </ItemGroup>
     <ItemGroup>
       <None Include="packages.config" />

@@ -63,6 +63,16 @@ namespace ModrinthSharp
         // search stuff
         // todo need to make a search method that uses filters
         
+        /// <summary>
+        /// Search Modrinth for a list of mods
+        /// </summary>
+        /// <param name="query">The main search query </param>
+        /// <param name="indexType">How results are indexed</param>
+        /// <param name="limit">The maximum amount of results to retrieve</param>
+        /// <param name="offset">Start from a specific page</param>
+        /// <param name="facets">A list of facets to filter results (ex: new Facet(FacetType.Versions, "1.19.4); )</param>
+        /// <returns>A list of SearchResult objects</returns>
+        /// <exception cref="ModrinthApiException"></exception>
         public async Task<SearchResults> Search(string query, IndexType indexType, int limit = 10, int offset = 0,
             List<Facet> facets = null)
         {
@@ -74,23 +84,48 @@ namespace ModrinthSharp
         }
         
         // Version stuff
+        
+        /// <summary>
+        /// Gets a version from a file hash
+        /// </summary>
+        /// <param name="hash">The hash of the file, either SHA1 or SHA512</param>
+        /// <returns></returns>
         public async Task<Version> GetVersionFromHash(string hash)
         {
             return await _modrinthClient.GetAsync<Version>($@"/version_file/{hash}");
         }
 
-        public async Task<List<Version>> GetVersions(string id)
+        /// <summary>
+        /// Gets a list of versions for a project
+        /// </summary>
+        /// <param name="id">The id of the project</param>
+        /// <param name="loaders">Filter by Mod Loader type (fabric, forge, etc)</param>
+        /// <param name="versions">Filter by Minecraft version</param>
+        /// <returns></returns>
+        /// <exception cref="ModrinthApiException"></exception>
+        public async Task<List<Version>> GetVersions(string id, List<string> loaders = null, List<string> versions = null)
         {
             if (!await CheckProject(id)) throw new ModrinthApiException("Project not found.");
-            VersionSearch vs = await _modrinthClient.GetAsync<VersionSearch>($@"/project/{id}/version");
+            var url = $@"/project/{id}/version?";
+            if (loaders != null) url += "&loaders=" + Utils.ConvertToJsArray(loaders);
+            if (versions != null) url += "&game_versions=" + Utils.ConvertToJsArray(versions);
+            Console.WriteLine(url);
+            VersionSearch vs = await _modrinthClient.GetAsync<VersionSearch>(url);
             if (vs == null) throw new ModrinthApiException("Error parsing version information.");
             return vs.ToList();
         }
 
-        public async Task<Version> GetLatestVersion(string id)
+        /// <summary>
+        /// Gets the latest version for a project
+        /// </summary>
+        /// <param name="id">The id of the project</param>
+        /// <param name="loaders">Filter by Mod Loader type (fabric, forge, etc)</param>
+        /// <param name="versions">Filter by Minecraft version</param>
+        /// <returns></returns>
+        public async Task<Version> GetLatestVersion(string id, List<string> loaders = null, List<string> versions = null)
         {
-            var versions = await GetVersions(id);
-            return versions.First();
+            var versionList = await GetVersions(id, loaders, versions);
+            return versionList.First();
         }
 
         /// <summary>
